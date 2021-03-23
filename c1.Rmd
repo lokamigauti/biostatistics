@@ -20,6 +20,9 @@ hand1994_elderheight <- read_lines("data/hand1994_elderheight.csv") %>%
   str_split_fixed(" ", n = Inf) %>%
   as.numeric %>%
   na.omit()
+
+hand1994_snore <- read_csv("data/hand1994_snore.csv", 
+    quote = "\\\"", )
 ```
 
 ## Question 1
@@ -48,21 +51,48 @@ hand1994_babies %>% # Make prevalence table
   spread(Survival, prop, fill = 0) # Make Survival as columns
 ```
 
-## Question 2
+## Question 4
 
 Analyze hand1994_elderheight dataset.
 
 ```{r}
-summary(hand1994_elderheight)
+summary(hand1994_elderheight) # Dataset summary
 ```
 
 ```{r}
-length(hand1994_elderheight)
+length(hand1994_elderheight) # Total incidence
 ```
 
 ```{r}
-hand1994_elderheight %>%
+hand1994_elderheight %>% # Binned incidence
   data.frame() %>%
-  transmute(Height = cut_width(.,5)) %>%
+  transmute(Height = cut_width(.,5)) %>% # Bin Height in 5 cm intervals
   count(Height)
+```
+
+## Question 5
+
+Complete the prevalence two-way table of the hand1994_snore dataset.
+
+```{r}
+hand1994_snore
+```
+
+```{r}
+hand1994_snore %>% # Snoring as exp. variables:
+  mutate(Total = Sim+Nao,
+         Sim = Sim/Total,
+         Nao = Nao/Total, Total = 1)
+```
+
+```{r}
+hand1994_snore %>% # Snoring as exp. variables:
+  pivot_longer(-`Ronco noturno`, names_to = "Doenca cardiaca") %>% # Dataframe rotation
+  pivot_wider(names_from = `Ronco noturno`) %>%
+  mutate(Total = Nao+Ocasional+`Quase todas as noites`+Sempre,
+         Nao = Nao/Total,
+         Ocasional = Ocasional/Total,
+         `Quase todas as noites` = `Quase todas as noites`/Total,
+         Sempre = Sempre/Total,
+         Total = 1)
 ```
