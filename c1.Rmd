@@ -5,29 +5,33 @@ output: html_notebook
 
 ## Init
 
-```{r, warning=FALSE}
+```{r, echo=FALSE}
 library(tidyverse)
-
 ```
 
 ## Dataset import
 
 ```{r}
-hand1994 <- read_csv("data/hand1994.csv", 
+hand1994_babies <- read_csv("data/hand1994_babies.csv", 
     col_types = cols(Survival = col_factor(levels = c("no", 
         "yes"))))
+
+hand1994_elderheight <- read_lines("data/hand1994_elderheight.csv") %>%
+  str_split_fixed(" ", n = Inf) %>%
+  as.numeric %>%
+  na.omit()
 ```
 
 ## Question 1
 
-Make a Two-way table of the hand1994 dataset.
+Make a Two-way table of the hand1994_babies dataset.
 
 ```{r}
-summary(hand1994) # Dataset summary
+summary(hand1994_babies) # Dataset summary
 ```
 
 ```{r}
-hand1994 %>% # Make incidence table
+hand1994_babies %>% # Make incidence table
   mutate(Weight = cut_interval(Weight, 5)) %>% # Bin Weight in 5 intervals
   count(Survival, Weight) %>% # Count of each pair case
   group_by(Weight) %>% # Set Weight as exp. variable
@@ -35,11 +39,30 @@ hand1994 %>% # Make incidence table
 ```
 
 ```{r}
-hand1994 %>% # Make prevalence table
+hand1994_babies %>% # Make prevalence table
   mutate(Weight = cut_interval(Weight, 5)) %>% # Bin Weight in 5 intervals
   count(Survival, Weight) %>% # Count of each pair case
   group_by(Weight) %>% # Set Weight as exp. variable
   mutate(prop = round(n / sum(n), 2)) %>% # Calc proportion
   select(-n) %>% # Remove pair incidence
   spread(Survival, prop, fill = 0) # Make Survival as columns
+```
+
+## Question 2
+
+Analyze hand1994_elderheight dataset.
+
+```{r}
+summary(hand1994_elderheight)
+```
+
+```{r}
+length(hand1994_elderheight)
+```
+
+```{r}
+hand1994_elderheight %>%
+  data.frame() %>%
+  transmute(Height = cut_width(.,5)) %>%
+  count(Height)
 ```
