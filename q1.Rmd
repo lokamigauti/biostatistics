@@ -1,0 +1,45 @@
+---
+title: "Class 1"
+output: html_notebook
+---
+
+## Init
+
+```{r, warning=FALSE}
+library(tidyverse)
+
+```
+
+## Dataset import
+
+```{r}
+hand1994 <- read_csv("data/hand1994.csv", 
+    col_types = cols(Survival = col_factor(levels = c("no", 
+        "yes"))))
+```
+
+## Question 1
+
+Make a Two-way table of the hand1994 dataset.
+
+```{r}
+summary(hand1994) # Dataset summary
+```
+
+```{r}
+hand1994 %>% # Make incidence table
+  mutate(Weight = cut_interval(Weight, 5)) %>% # Bin Weight in 5 intervals
+  count(Survival, Weight) %>% # Count of each pair case
+  group_by(Weight) %>% # Set Weight as exp. variable
+  spread(Survival, n, fill = 0) # Make Survival as columns
+```
+
+```{r}
+hand1994 %>% # Make prevalence table
+  mutate(Weight = cut_interval(Weight, 5)) %>% # Bin Weight in 5 intervals
+  count(Survival, Weight) %>% # Count of each pair case
+  group_by(Weight) %>% # Set Weight as exp. variable
+  mutate(prop = round(n / sum(n), 2)) %>% # Calc proportion
+  select(-n) %>% # Remove pair incidence
+  spread(Survival, prop, fill = 0) # Make Survival as columns
+```
