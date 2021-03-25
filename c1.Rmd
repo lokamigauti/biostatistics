@@ -117,6 +117,6 @@ hand1994_maternaldiet %>% # Snoring as exp. variables:
 
 Comment the following results (MONTEIRO CA et al. (Rev. Saúde Pública; 2000:34 (6, supl): 26-40)):
 
-![](C:/Users/leona/AppData/Local/RStudio/tmp/paste-67B7E509.png)
+![](support/tab-c1-q7.png)
 
 The population birth weight ("desfecho") is explained by the birth location (exp. var.). Sao Paulo - 1998 appears to have a slightly lower mean birth weight than Gotenburgo - 1972/73. Both are in (3000 - 3500] g.
