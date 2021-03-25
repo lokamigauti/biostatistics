@@ -128,4 +128,4 @@ Comment the following results (MONTEIRO CA et al. (Rev. Saúde Pública; 2000:34
 
 ![](support/tab-c1-q7.png)
 
-The population birth weight ("desfecho") is explained by the birth location (exp. var.). Sao Paulo - 1998 appears to have a slightly lower mean birth weight than Gotenburgo - 1972/73. Both are in (3000 - 3500] g.
+The population birth weight ("desfecho") is explained by the birth location (exp. var.). Sao Paulo - 1998 appears to have a slightly lower mean birth weight than Gotenburgo - 1972/73. Both are in (3000 - 3500] g. Circa 30 years later, Sao Paulo presents a higher prevalence of low-weight births and a lesser of high-weight. It is an indicative of the difference of development of these cities. Note that the analysis of proportion allow us to compare the two cities.
