@@ -88,7 +88,7 @@ hand1994_snore %>% # Snoring as exp. variables:
 ```
 
 ```{r}
-hand1994_snore %>% # Snoring as exp. variables:
+hand1994_snore %>% # Cardio disiases as exp. variables, just for curiosity:
   pivot_longer(-`Ronco noturno`, names_to = "Doenca cardiaca") %>% # Dataframe rotation
   pivot_wider(names_from = `Ronco noturno`) %>%
   mutate(Total = Nao+Ocasional+`Quase todas as noites`+Sempre,
