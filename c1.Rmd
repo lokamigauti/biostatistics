@@ -1,17 +1,19 @@
 ---
 title: "Class 1"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 ## Init
 
-```{r, echo=FALSE}
+```{r, message=FALSE}
 library(tidyverse)
 ```
 
 ## Dataset import
 
-```{r, echo=FALSE}
+```{r, message=FALSE}
 hand1994_babies <- read_csv("data/hand1994_babies.csv", 
     col_types = cols(Survival = col_factor(levels = c("no", "yes"))))
 
@@ -105,7 +107,11 @@ hand1994_snore %>% # Cardio disiases as exp. variables, just for curiosity:
 Complete the prevalence two-way table of the hand1994_maternaldiet dataset, with control and cases as exp. var.
 
 ```{r}
-hand1994_maternaldiet %>% # Snoring as exp. variables:
+hand1994_maternaldiet
+```
+
+```{r}
+hand1994_maternaldiet %>% # Experimental population as exp. variables:
   pivot_longer(-`Dieta materna`, names_to = "Exp_pop") %>% # Dataframe rotation
   pivot_wider(names_from = `Dieta materna`) %>%
   mutate(Total = Boa+Razoavel+Pobre,
