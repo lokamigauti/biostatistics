@@ -83,7 +83,8 @@ hand1994_snore
 hand1994_snore %>% # Snoring as exp. variables:
   mutate(Total = Sim+Nao,
          Sim = Sim/Total,
-         Nao = Nao/Total, Total = 1)
+         Nao = Nao/Total, Total = 1) %>%
+  mutate(across(where(is.numeric), round, 2))
 ```
 
 ```{r}
@@ -95,7 +96,8 @@ hand1994_snore %>% # Snoring as exp. variables:
          Ocasional = Ocasional/Total,
          `Quase todas as noites` = `Quase todas as noites`/Total,
          Sempre = Sempre/Total,
-         Total = 1)
+         Total = 1) %>%
+  mutate(across(where(is.numeric), round, 2))
 ```
 
 ## Question 6
@@ -110,7 +112,8 @@ hand1994_maternaldiet %>% # Snoring as exp. variables:
          Boa = Boa/Total,
          Razoavel = Razoavel/Total,
          Pobre = Pobre/Total,
-         Total = 1)
+         Total = 1) %>%
+  mutate(across(where(is.numeric), round, 2))
 ```
 
 ## Question 7
