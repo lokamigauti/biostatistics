@@ -28,7 +28,7 @@ hand1994_snore <- read_csv("data/hand1994_snore.csv",
 hand1994_maternaldiet <- read_csv("data/hand1994_maternaldiet.csv")
 ```
 
-## Question 1
+## Question 1 - Slide 15
 
 Make a Two-way table of the hand1994_babies dataset.
 
@@ -54,7 +54,7 @@ hand1994_babies %>% # Make prevalence table
   spread(Survival, prop, fill = 0) # Make Survival as columns
 ```
 
-## Question 4
+## Question 4 - Slide 16
 
 Analyze hand1994_elderheight dataset.
 
@@ -73,7 +73,7 @@ hand1994_elderheight %>% # Binned incidence
   count(Height)
 ```
 
-## Question 5
+## Question 5 - Slide 17
 
 Complete the prevalence two-way table of the hand1994_snore dataset.
 
@@ -102,7 +102,7 @@ hand1994_snore %>% # Cardio disiases as exp. variables, just for curiosity:
   mutate(across(where(is.numeric), round, 2))
 ```
 
-## Question 6
+## Question 6 - Slide 18
 
 Complete the prevalence two-way table of the hand1994_maternaldiet dataset, with control and cases as exp. var.
 
@@ -122,7 +122,7 @@ hand1994_maternaldiet %>% # Experimental population as exp. variables:
   mutate(across(where(is.numeric), round, 2))
 ```
 
-## Question 7
+## Question 7 - Slide 19
 
 Comment the following results (MONTEIRO CA et al. (Rev. Saúde Pública; 2000:34 (6, supl): 26-40)):
 
