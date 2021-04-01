@@ -7,31 +7,13 @@ output:
 
 # Hands-on 1 - Zica
 
-Dicionário:
-\*\*\*\*
-racacor
-0"branca"
-1"parda"
-2"preta"
-9"nao sabe"
+Dicionário: \*\*\*\* racacor 0"branca" 1"parda" 2"preta" 9"nao sabe"
 
-estadocivil
-0"casada"
-1"morajunto"
-2"solteira"
+estadocivil 0"casada" 1"morajunto" 2"solteira"
 
-escol
-0"0"
-1"primeiro grau"
-2"segundo grau"
-3"ensino médio incompleto"
-4"ensino médio completo"
-5"ensino superior incompleto"
-6"ensino superior completo"
+escol 0"0" 1"primeiro grau" 2"segundo grau" 3"ensino médio incompleto" 4"ensino médio completo" 5"ensino superior incompleto" 6"ensino superior completo"
 
-grupo
-0"privado"
-1"SUS"
+grupo 0"privado" 1"SUS"
 
 ```{r}
 library(tidyverse)

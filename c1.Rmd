@@ -9,6 +9,7 @@ output:
 
 ```{r, message=FALSE}
 library(tidyverse)
+library(jmv)
 ```
 
 ## Dataset import

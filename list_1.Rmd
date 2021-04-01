@@ -1,0 +1,87 @@
+---
+title: "List 1"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+## Init and Dataset import
+
+```{r, message=FALSE}
+library(tidyverse)
+library(jmv)
+hand1994_babies <- read_csv("data/hand1994_babies.csv", 
+    col_types = cols(Survival = col_factor(levels = c("no", "yes"))))
+
+hand1994_elderheight <- read_lines("data/hand1994_elderheight.csv") %>%
+  str_split_fixed(" ", n = Inf) %>%
+  as.numeric %>%
+  na.omit()
+
+hand1994_maternaldiet <- read_csv("data/hand1994_maternaldiet.csv")
+```
+
+## Question 1 - Slide 15
+
+Make a Two-way table of the hand1994_babies dataset.
+
+```{r}
+hand1994_babies # Dataset used
+```
+
+```{r}
+summary(hand1994_babies) # Dataset summary
+```
+
+```{r}
+options(digits = 4)
+result <- hand1994_babies %>%
+  mutate(Weight = cut_interval(Weight, 5)) %>% # Bin Weight in 5 intervals
+  count(Survival, Weight) %>%
+  contTables(formula = n ~ Weight:Survival, pcRow = T) # Set Weight as exp. variable
+
+result$freqs
+```
+
+## Question 4 - Slide 16
+
+Analyze hand1994_elderheight dataset.
+
+```{r}
+hand1994_elderheight # Dataset used
+```
+
+```{r}
+summary(hand1994_elderheight) # Dataset summary
+```
+
+```{r}
+length(hand1994_elderheight) # Total incidence
+```
+
+```{r}
+hand1994_elderheight %>% # Binned incidence
+  data.frame() %>%
+  transmute(Height = cut_width(.,5)) %>% # Bin Height in 5 cm intervals
+  count(Height)
+```
+
+The Height distribution of the 351 subjects appears to have a normal-like distribution, with mean and median in 160 cm, which is inside the 158 \|-- 162 (here, represented as (158, 162]) bin. The 5 cm interval bin appears to be sufficient to show the distribution.
+
+## Question 6 - Slide 18
+
+Complete the prevalence two-way table of the hand1994_maternaldiet dataset, with control and cases as exp. var. Analyze and discuss.
+
+```{r}
+hand1994_maternaldiet # Dataset used
+```
+
+```{r}
+results <- hand1994_maternaldiet %>%
+  pivot_longer(-`Dieta materna`, names_to = "Exp_pop") %>%
+  contTables(formula = value ~ Exp_pop:`Dieta materna`, pcRow = T)
+
+results$freqs
+```
+
+The group of mothers of babies with spina bifida tend to have a poorer diet in comparison with the control group. However, the control group itself do not have any apparent tendency in diet quality.
