@@ -1,0 +1,65 @@
+---
+title: "Class 4"
+output: html_notebook
+---
+
+## Init
+
+```{r, message=FALSE}
+library(readxl)
+library(tidyverse)
+library(jmv)
+options(digits = 4)
+```
+
+## Dataset import
+
+```{r}
+ex1_expand <- read_excel("data/ex1_expand.xlsx") %>%
+  mutate(chd = as.factor(chd), consumocafe = as.factor(consumocafe))
+ex2_expand <- read_excel("data/ex2_expand.xlsx") %>%
+  mutate(retinol = as.factor(retinol))
+```
+
+## Dataset description
+
+```{r}
+summary(ex1_expand)
+summary(ex2_expand)
+```
+
+```{r}
+result <- ex1_expand %>%
+  count(consumocafe, chd) %>%
+  contTables(formula = n ~ chd:consumocafe, pcCol = T) # Set consumocafe as exp. variable
+
+result$freqs
+```
+
+```{r}
+ex1_expand %>%
+  count(consumocafe, chd) %>%
+  group_by(consumocafe) %>%
+  mutate(perc = n/sum(n)) %>%
+  ggplot(aes(x = consumocafe, y = perc, fill = chd)) +
+  geom_col(position = 'dodge') +
+  theme_minimal()
+```
+
+```{r}
+ex2_expand %>%
+  count(retinol) %>%
+  mutate(perc = n/sum(n)) %>%
+  ggplot(aes(x = retinol, y = perc)) +
+  geom_col(fill = "#00BFC4") +
+  theme_minimal()
+```
+
+```{r}
+ex3 <- c(166, 158, 202, 166, 135, 86, 150, 86, 121)
+hist(ex3, breaks = 4)
+summary(ex3)
+sd(ex3)
+sd(ex3)/mean(ex3)
+```
+
