@@ -1,0 +1,191 @@
+---
+title: "2 Means Hypothesis Test List"
+author: "Leonardo Yoshiaki Kamigauti"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+```{r, warning=FALSE, error=FALSE, echo = F, results = 'hide', message=FALSE}
+library(tidyverse)
+theme_set(theme_minimal())
+
+data <- read_csv("data/treatment.csv") %>%
+  mutate(treatment = as.factor(if_else(treatment == 0, "DC", "DBF")))
+```
+
+# Assumptions
+
+$$\left\{\begin{matrix}
+\alpha = 5\% \\
+H_0: \mu_1 = \mu_2 \\ 
+H_A: \mu_1 \neq  \mu_2\end{matrix}\right.
+$$
+
+# PDI
+
+## Data description
+
+```{r, echo = F}
+data %>% 
+  select(pdi, treatment) %>%
+  summary()
+paste("Total obs.:", nrow(data), sep = " ")
+```
+
+```{r, warning=FALSE, echo = F, fig.height=4.5, fig.width=8}
+data %>%
+  select(pdi, treatment) %>%
+  ggplot(aes(x = pdi,
+             group = treatment)) +
+  geom_histogram(aes(y = ..density..,
+                     col = treatment),
+                 bins = 10,
+                 alpha = 0) +
+  geom_density(aes(col = treatment,
+                   fill = treatment),
+               alpha = 0.2,
+               linetype = 2) +
+  ggtitle("Data distribution",
+          subtitle = "Histograms and (continuous) kernel density estimation (dashed)")
+```
+
+```{r, warning=FALSE, echo = F, fig.height=4.5, fig.width=8}
+data %>%
+  select(pdi, treatment) %>%
+  ggplot(aes(x = treatment,
+             y = pdi,
+             fill = treatment)) +
+  geom_violin(aes(col = treatment),
+              trim = FALSE) +
+  geom_boxplot(width = 0.07) +
+  ggtitle("Data comparison",
+          subtitle = "Violin and boxplot")
+```
+
+## Is the population distribution normal?
+
+```{r, warning=FALSE, echo = F, fig.height=4.5, fig.width=8}
+sw <- data %>%
+  select(pdi) %>%
+  summarise(W = round(shapiro.test(na.omit(pdi))$statistic, digits = 2),
+            p = round(shapiro.test(na.omit(pdi))$p.value, digits = 2))
+
+data %>%
+  ggplot(aes(sample = pdi)) +
+  stat_qq() +
+  stat_qq_line() +
+  ggtitle("Data normality",
+          subtitle = paste("Shapiro-Wilk's results: W =", sw$W, "p-value =", sw$p, sep = " "))
+```
+
+There is no evidence that pdi is not normal (p = 0.13), and it is visually close to a normal distribution.
+
+## Are the variances different?
+
+```{r, echo = F}
+data %>%
+  select(pdi, treatment) %>%
+  car::leveneTest(data = ., pdi ~ treatment)
+```
+
+There is no evidence of different variances (p = 0.09).
+
+## Are the means different?
+
+```{r, echo = F}
+data %>%
+  select(pdi, treatment) %>%
+  mutate(row = row_number()) %>%
+  pivot_wider(names_from = treatment, values_from = pdi) %>%
+  t.test(data = ., x = na.omit(.$DC), y = na.omit(.$DBF), alternative = "two.sided", var.equal = T)
+```
+
+There is evidence that the distr. means are different (p = 0.03).
+
+# MDI
+
+## Data description
+
+```{r, echo = F}
+data %>% 
+  select(mdi, treatment) %>%
+  summary()
+paste("Total obs.:", nrow(data), sep = " ")
+```
+
+```{r, warning=FALSE, echo = F, fig.height=4.5, fig.width=8}
+data %>%
+  select(mdi, treatment) %>%
+  ggplot(aes(x = mdi,
+             group = treatment)) +
+  geom_histogram(aes(y = ..density..,
+                     col = treatment),
+                 bins = 10,
+                 alpha = 0) +
+  geom_density(aes(col = treatment,
+                   fill = treatment),
+               alpha = 0.2,
+               linetype = 2) +
+  ggtitle("Data distribution",
+          subtitle = "Histograms and (continuous) kernel density estimation (dashed)")
+```
+
+```{r, warning=FALSE, echo = F, fig.height=4.5, fig.width=8}
+data %>%
+  select(mdi, treatment) %>%
+  ggplot(aes(x = treatment,
+             y = mdi,
+             fill = treatment)) +
+  geom_violin(aes(col = treatment),
+              trim = FALSE) +
+  geom_boxplot(width = 0.07) +
+  ggtitle("Data comparison",
+          subtitle = "Violin and boxplot")
+```
+
+## Is the population distribution normal?
+
+```{r, warning=FALSE, echo = F, fig.height=4.5, fig.width=8}
+sw <- data %>%
+  select(mdi) %>%
+  summarise(W = round(shapiro.test(na.omit(mdi))$statistic, digits = 2),
+            p = round(shapiro.test(na.omit(mdi))$p.value, digits = 2))
+
+data %>%
+  ggplot(aes(sample = mdi)) +
+  stat_qq() +
+  stat_qq_line() +
+  ggtitle("Data normality",
+          subtitle = paste("Shapiro-Wilk's results: W =", sw$W, "p-value > 0.005", sep = " "))
+```
+
+There is no evidence that mdi is not normal (p = 0.13), and it is visually close to a normal distribution.
+
+## Are the variances different?
+
+```{r, echo = F}
+data %>%
+  select(mdi, treatment) %>%
+  car::leveneTest(data = ., mdi ~ treatment)
+```
+
+There is no evidence of no different variances (p = 0.46).
+
+## Are the means different?
+
+```{r, echo = F}
+data %>%
+  select(mdi, treatment) %>%
+  mutate(row = row_number()) %>%
+  pivot_wider(names_from = treatment, values_from = mdi) %>%
+  t.test(data = ., x = na.omit(.$DC), y = na.omit(.$DBF), alternative = "two.sided", var.equal = F)
+```
+
+This t-test considers two different variances. There is no evidence that the distr. means are different (p = 0.21).
+
+# Conclusion
+
+The sample mean PDI of DBF patients is higher than the sample mean PDI of DC patients.
+
+However, we cannot state that sample mean MDI of DBF patients is different than the sample mean MDI of DC patients.
