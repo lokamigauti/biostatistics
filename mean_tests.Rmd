@@ -41,10 +41,11 @@ data %>%
   geom_histogram(aes(y = ..density..,
                      col = treatment),
                  bins = 10,
-                 alpha = 0) +
+                 alpha = 0,
+                 position="identity") +
   geom_density(aes(col = treatment,
                    fill = treatment),
-               alpha = 0.2,
+               alpha = 0.1,
                linetype = 2) +
   ggtitle("Data distribution",
           subtitle = "Histograms and (continuous) kernel density estimation (dashed)")
@@ -55,10 +56,13 @@ data %>%
   select(pdi, treatment) %>%
   ggplot(aes(x = treatment,
              y = pdi,
-             fill = treatment)) +
-  geom_violin(aes(col = treatment),
-              trim = FALSE) +
-  geom_boxplot(width = 0.07) +
+             fill = treatment,
+             col = treatment)) +
+  geom_violin(trim = FALSE,
+              alpha = 0.1,
+              linetype = 2) +
+  geom_boxplot(width = 0.07,
+               alpha = 0) +
   ggtitle("Data comparison",
           subtitle = "Violin and boxplot")
 ```
@@ -86,7 +90,7 @@ There is no evidence that pdi is not normal (p = 0.13), and it is visually close
 ```{r, echo = F}
 data %>%
   select(pdi, treatment) %>%
-  car::leveneTest(data = ., pdi ~ treatment)
+  car::leveneTest(data = ., pdi ~ treatment, center = "mean")
 ```
 
 There is no evidence of different variances (p = 0.09).
@@ -122,10 +126,11 @@ data %>%
   geom_histogram(aes(y = ..density..,
                      col = treatment),
                  bins = 10,
-                 alpha = 0) +
+                 alpha = 0,
+                 position="identity") +
   geom_density(aes(col = treatment,
                    fill = treatment),
-               alpha = 0.2,
+               alpha = 0.1,
                linetype = 2) +
   ggtitle("Data distribution",
           subtitle = "Histograms and (continuous) kernel density estimation (dashed)")
@@ -136,10 +141,13 @@ data %>%
   select(mdi, treatment) %>%
   ggplot(aes(x = treatment,
              y = mdi,
-             fill = treatment)) +
-  geom_violin(aes(col = treatment),
-              trim = FALSE) +
-  geom_boxplot(width = 0.07) +
+             fill = treatment,
+             col = treatment)) +
+  geom_violin(trim = FALSE,
+              alpha = 0.1,
+              linetype = 2) +
+  geom_boxplot(width = 0.07,
+               alpha = 0) +
   ggtitle("Data comparison",
           subtitle = "Violin and boxplot")
 ```
@@ -160,17 +168,17 @@ data %>%
           subtitle = paste("Shapiro-Wilk's results: W =", sw$W, "p-value > 0.005", sep = " "))
 ```
 
-There is no evidence that mdi is not normal (p = 0.13), and it is visually close to a normal distribution.
+There is evidence that mdi is not normal (p > 0.005), and it is visually skewed.
 
 ## Are the variances different?
 
 ```{r, echo = F}
 data %>%
   select(mdi, treatment) %>%
-  car::leveneTest(data = ., mdi ~ treatment)
+  car::leveneTest(data = ., mdi ~ treatment, center = "mean")
 ```
 
-There is no evidence of no different variances (p = 0.46).
+There is no evidence of no different variances (p = 0.53).
 
 ## Are the means different?
 
@@ -182,7 +190,7 @@ data %>%
   t.test(data = ., x = na.omit(.$DC), y = na.omit(.$DBF), alternative = "two.sided", var.equal = F)
 ```
 
-This t-test considers two different variances. There is no evidence that the distr. means are different (p = 0.21).
+This t-test considers two different variances. Ignoring the lack of data normality, there is no evidence that the distr. means are different (p = 0.21).
 
 # Conclusion
 
